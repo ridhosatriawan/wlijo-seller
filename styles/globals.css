@@ -1,16 +1,206 @@
-html,
+@import "bulma/css/bulma.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
 body {
-  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.green {
+  color: green;
+}
+
+.white {
+  color: white;
+}
+
+.gray {
+  color: gray;
+}
+
+.bg-green {
+  background-color: green;
+}
+
+.bg-white {
+  background-color: rgb(255, 255, 255);
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.tp-border {
+  border-top: 2px solid green;
+}
+
+.btm-border {
+  border-bottom: 2px solid green;
+}
+
+.tp-bordergray {
+  border-top: 2px solid gray;
+}
+
+.btm-bordergray {
+  border-bottom: 2px solid gray;
+}
+
+.content {
+  width: 100%;
+}
+
+div.aksi .button:hover {
+  color: white;
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.w {
+  word-wrap: break-word;
+}
+
+.navbar-item {
+  color: green;
+  font-size: medium;
+}
+
+.navbar-link {
+  color: green;
+  font-size: medium;
+}
+
+.navbar-brand .navbar-item img .logo {
+  background-color: white;
+}
+
+.navbar-end .navbar-item:hover {
+  color: white;
+  background-color: green;
+  border-radius: 20px;
+}
+
+.navigasi {
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.navbar-brand .navbar-item img {
+  max-height: 50px;
+  background-color: green;
+  border-radius: 50%;
+}
+
+.navbar-menu {
+  box-shadow: none;
+}
+
+.menu {
+  position: sticky;
+  vertical-align: top;
+  height: 100vh;
+  overflow-y: auto;
+  width: 300px;
+  top: 0;
+  bottom: 0;
+  padding-left: 30px;
+  padding-top: 20px;
+  background-color: rgb(243, 243, 243);
+}
+
+.bg-rounded {
+  border-radius: 5px;
+}
+
+.masukan {
+  max-width: 500px;
+}
+
+form.form {
+  max-width: 1000px;
+}
+
+.hscroll {
+  overflow-x: auto;
+  padding: 10px;
+  margin: 10px;
+}
+
+.s {
+  width: 1000px;
+}
+
+div.columns {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.table thead tr {
+  background-color: green;
 }
 
-* {
-  box-sizing: border-box;
+.table tr td {
+  border: none;
+}
+
+.table td.white {
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #d4d4d4;
+}
+
+.divi {
+  border-right: 2px solid gray;
+}
+
+.active {
+  color: green;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+}
+
+#login-daftar-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login {
+  width: 50vh;
+  height: 65vh;
+}
+
+.login-daftar-full {
+  width: 100%;
+}
+
+.daftar {
+  width: 50vh;
+  height: 80vh;
+}
+
+.controls {
+  position: fixed;
+  bottom: 40px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.slider {
+  width: 50%;
+}
+
+.m-100 {
+  margin: 0 100px;
 }
