@@ -2,9 +2,20 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
+import cookies from "next-cookies";
 
 export async function getServerSideProps(ctx) {
-  const req = await fetch('http://localhost:3080/penjualanLangsung', {
+  const { idToko, token } = cookies(ctx);
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
+  }
+
+  const req = await fetch('http://localhost:3000/api/penjualanLangsung/' + idToko, {
     headers: {
       "Content-Type": "application/json"
     }
@@ -14,12 +25,14 @@ export async function getServerSideProps(ctx) {
 
   return {
     props: {
-      list: res
+      list: res.data,
+      idToko
     }
   }
 }
 
 const PenjualanLangsung = (props) => {
+  const { idToko } = props
   const [list, setList] = useState(props.list);
   const [title, setTitle] = useState("");
   const [modal, setModal] = useState('modal');
@@ -41,12 +54,11 @@ const PenjualanLangsung = (props) => {
   }
 
   function handleDelete(id) {
-    // belum bisa hapus detailnya
     const validation = confirm("Mau di Hapus ?");
-    const filtered = list.filter(data => data.id !== id);
+    const filtered = list.filter(data => data.idPl !== id);
 
     if (validation) {
-      fetch('http://localhost:3080/penjualanLangsung/' + id, {
+      fetch(`http://localhost:3000/api/penjualanLangsung/delete/${idToko}/${id}`, {
         method: "DELETE"
       });
       setList(
@@ -56,8 +68,23 @@ const PenjualanLangsung = (props) => {
 
   }
 
+  const sendPl = () => {
+    fetch('http://localhost:3000/api/penjualanLangsung/create', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        judul: title,
+        idToko
+      })
+    }).then(() => { Router.push("/penjualan/langsung/tambahTransaksi") })
+
+
+  }
+
   return (
-    <div>
+    <>
       <Head>
         <title>Penjualan Langsung</title>
       </Head>
@@ -93,7 +120,7 @@ const PenjualanLangsung = (props) => {
               <span className='is-size-7'>max 20 karakter</span>
             </section>
             <footer className="modal-card-foot is-justify-content-end">
-              <button className="button bg-green white" >Lanjut</button>
+              <button className="button bg-green white" onClick={sendPl}>Lanjut</button>
               <button className="button" onClick={modalHandler.bind(this)}>Batal</button>
             </footer>
           </div>
@@ -106,12 +133,12 @@ const PenjualanLangsung = (props) => {
             <div key={index} className="is-flex is-align-items-center is-justify-content-space-between px-5 mt-3 pb-3 btm-border">
               <h3 className="is-size-5-mobile is-size-3-desktop">{data.judul}</h3>
               <div className="aksi">
-                <Link href={"/penjualan/langsung/" + data.id}>
+                <Link href={"/penjualan/langsung/detail/" + idToko + "/" + data.idPl}>
                   <button className="button is-size-6-desktop is-size-7-mobile bg-green white">
                     Detail
                   </button>
                 </Link>
-                <button onClick={handleDelete.bind(this, data.id)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">
+                <button onClick={handleDelete.bind(this, data.idPl)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">
                   hapus
                 </button>
               </div>
@@ -119,7 +146,7 @@ const PenjualanLangsung = (props) => {
           ))
         }
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,14 +1,12 @@
 import db from '../../../libs/db';
 
 export default async function handler(req, res) {
+    const { id } = req.query
     if (req.method !== "GET") return res.status(405).end();
-
-    const { id } = req.query;
-
-    const produk = await db('produk').where({ idToko: id });
+    const rencana = await db('penjualan_langsung').where({ idToko: id });
 
     res.status(200);
     res.json({
-        data: produk
+        data: rencana
     })
 }

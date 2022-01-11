@@ -4,7 +4,17 @@ import { useState } from 'react';
 import cookies from 'next-cookies';
 
 export async function getServerSideProps(ctx) {
-    const { idToko } = cookies(ctx)
+    const { idToko, token } = cookies(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
     const req = await fetch('http://localhost:3000/api/rencanaBelanja/' + idToko);
     const res = await req.json();
 
@@ -130,7 +140,7 @@ const TambahRencanaBelanja = (props) => {
     }
 
     return (
-        <div>
+        <>
             <Head>
                 <title>Tambah Rencana Belanja</title>
             </Head>
@@ -202,7 +212,7 @@ const TambahRencanaBelanja = (props) => {
                 </table>
             </div>
             <button className="button bg-green white is-rounded my-5 mx-4" onClick={sendData} type="button">Simpan</button>
-        </div>
+        </>
     );
 }
 

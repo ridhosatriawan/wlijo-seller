@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Router from 'next/router';
+import cookies from 'next-cookies';
 
 export async function getServerSideProps(ctx) {
+    const { token } = cookies(ctx);
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
     const { id, idToko } = ctx.query;
     const req = await fetch(`http://localhost:3000/api/rencanaBelanja/detail/${idToko}/${id}`);
     const res = await req.json();

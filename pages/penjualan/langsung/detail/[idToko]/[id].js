@@ -1,36 +1,34 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import Router from "next/router";
+import cookies from "next-cookies";
 
 export async function getServerSideProps(ctx) {
-    const { id } = ctx.query;
-
-    const detail = await fetch('http://localhost:3080/detailPenjualanLangsung?idPL=' + id, {
-        headers: {
-            'Content-Type': 'application/json'
+    const { token } = cookies(ctx);
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
         }
-    });
-    const titles = await fetch('http://localhost:3080/penjualanLangsung/' + id, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+    }
+    const { id, idToko } = ctx.query;
 
-    const res = await detail.json();
-    const title = await titles.json();
+    const req = await fetch(`http://localhost:3000/api/penjualanLangsung/detail/${idToko}/${id}`);
+    const res = await req.json();
 
 
     return {
         props: {
-            data: res,
-            title
+            data: res.result
         }
     }
 }
 
 
 export default function detailPL(props) {
-    const [list, seList] = useState(props.data);
+    const [list, seList] = useState(props.data.list);
     const price = list.map(({ harga }) => harga);
     const total = price.reduce((total, amount) => total + amount);
 
@@ -43,7 +41,7 @@ export default function detailPL(props) {
                 <button className="button green is-size-7-mobile" onClick={() => { Router.push('/penjualan/langsung') }}><i className="fas fa-arrow-left pr-2 green"></i>Kembali</button>
             </div>
             <div className="title is-size-5-mobile green px-5 pt-5 is-flex is-justify-content-space-between is-align-items-center masukan">
-                <p>{props.title.judul}</p>
+                <p>{props.data.judul}</p>
             </div>
             <div className="hscroll">
                 <table className="table">

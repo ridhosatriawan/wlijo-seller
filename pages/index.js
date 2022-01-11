@@ -1,10 +1,22 @@
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
+import cookies from "next-cookies";
+
 
 export async function getServerSideProps(ctx) {
+  const { idToko, token } = cookies(ctx)
 
-  const req = await fetch('http://localhost:3000/api/profil');
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
+  }
+
+  const req = await fetch('http://localhost:3000/api/profil/' + idToko);
   const res = await req.json();
 
   return {
@@ -40,13 +52,15 @@ const BtnStat = (props) => {
   }
 }
 
-const DashboardToko = (props) => {
-  const { id, namaToko, password, noWa, alamat, status, foto } = props.data[0];
+export default function DashboardToko(props) {
+  const { id, namaToko, password, desa, kecamatan, noWa, alamat, status, foto } = props.data;
   const [statusToko, setStatusToko] = useState(status);
   const [dataToko, setDataToko] = useState({
     namaToko,
     password,
     noWa,
+    desa,
+    kecamatan,
     alamat,
     status,
     foto
@@ -93,7 +107,7 @@ const DashboardToko = (props) => {
   }
 
   return (
-    <div>
+    <>
       <Head>
         <title>Dashboard Toko</title>
       </Head>
@@ -133,22 +147,21 @@ const DashboardToko = (props) => {
               <div className="mx-5">Alamat</div>
               <div>
                 <div className="panel-block mx-0 pointer">
-                  <div>{dataToko.alamat}</div>
+                  <div>{dataToko.desa} ,{dataToko.kecamatan}</div>
                 </div>
               </div>
             </div>
           </div>
           <div className="m-5 is-flex is-justify-content-center">
             {
-              dataToko.alamat ?
+              dataToko.desa ?
                 <BtnStat status={statusToko} jualan={jualan} berhenti={berhenti} /> :
                 <div className="has-text-centered">Lengkapi Data Diri Anda Untuk Mulai Berjualan</div>
             }
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default DashboardToko;

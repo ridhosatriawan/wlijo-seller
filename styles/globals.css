@@ -76,20 +76,14 @@ div.aksi .button:hover {
 }
 
 .navbar-end .navbar-item:hover {
-  color: white;
-  background-color: green;
-  border-radius: 20px;
+  padding-bottom: 10px;
+  color: green;
+  background-color: none;
 }
 
 .navigasi {
   padding: 10px 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.navbar-brand .navbar-item img {
-  max-height: 50px;
-  background-color: green;
-  border-radius: 50%;
 }
 
 .navbar-menu {
@@ -203,4 +197,8 @@ tr:nth-child(even) {
 
 .m-100 {
   margin: 0 100px;
+}
+
+.red {
+  color: red;
 }

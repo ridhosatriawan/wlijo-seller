@@ -3,23 +3,28 @@ import Router from 'next/router';
 import { useState, useRef } from 'react';
 import Resizer from 'react-image-file-resizer';
 import ModalCrop from '../../components/modalCrop';
+import cookie from 'next-cookies'
 
 export async function getServerSideProps(ctx) {
-
-    const req = await fetch('http://localhost:3080/profil');
-    const res = await req.json();
+    const { idToko, token } = cookie(ctx)
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
 
     return {
         props: {
-            data: res
+            idToko
         }
     }
 
 }
 
 const TambahTransaksi = (props) => {
-
-    const idToko = props.data[0].id;
 
     const [croppedFoto, setCroppedFoto] = useState(null);
     const [modal, setModal] = useState("modal");
@@ -90,7 +95,7 @@ const TambahTransaksi = (props) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                idToko,
+                idToko: props.idToko,
                 nama: data.nama,
                 harga: data.harga,
                 satuan: data.satuan,
@@ -101,7 +106,7 @@ const TambahTransaksi = (props) => {
     }
 
     return (
-        <div>
+        <>
             <Head>
                 <title>Tambah Produk</title>
             </Head>
@@ -170,7 +175,7 @@ const TambahTransaksi = (props) => {
                     </div>
                 </div>
             </form>
-        </div>
+        </>
     );
 }
 

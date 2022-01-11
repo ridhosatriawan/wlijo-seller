@@ -4,11 +4,12 @@ import bcrypt from 'bcrypt';
 export default async function handler(req, res) {
     if (req.method !== "POST") return res.status(405).end();
 
-    const { password, noWa } = req.body;
+    const { nama, password, noWa } = req.body;
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, salt);
 
     const register = await db('profil').insert({
+        namaToko: nama,
         noWa,
         password: passwordHash
     })

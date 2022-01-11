@@ -2,9 +2,20 @@ import Head from "next/head";
 import { useState } from "react";
 import CardProduct from "../../components/cardProduct";
 import Link from 'next/link';
+import cookies from "next-cookies";
 
 export async function getServerSideProps(ctx) {
-    const req = await fetch('http://localhost:3000/api/produk');
+    const { idToko, token } = cookies(ctx);
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
+    const req = await fetch('http://localhost:3000/api/produk/' + idToko);
     const res = await req.json();
 
 

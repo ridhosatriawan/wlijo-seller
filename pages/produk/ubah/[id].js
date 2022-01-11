@@ -3,8 +3,20 @@ import Head from "next/head";
 import { useState, useRef } from "react";
 import Resizer from 'react-image-file-resizer';
 import ModalCrop from '../../../components/modalCrop';
+import cookies from "next-cookies";
 
 export async function getServerSideProps(ctx) {
+    const { token } = cookies(ctx);
+
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+
     const { id } = ctx.query
     const req = await fetch('http://localhost:3000/api/produk/' + id);
     const res = await req.json();

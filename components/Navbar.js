@@ -1,7 +1,43 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useState } from 'react';
+import Cookies from "js-cookie";
+import Router from "next/router";
 
 const Navbar = (data) => {
+  const [nav, setNav] = useState({
+    navBur: "navbar-burger",
+    navMen: "navbar-menu"
+  })
+
+  function handleClick() {
+    if (nav.navBur === "navbar-burger") {
+      setNav({
+        navBur: "navbar-burger is-active",
+        navMen: "navbar-menu is-active"
+      })
+    } else {
+      setNav({
+        navBur: "navbar-burger",
+        navMen: "navbar-menu"
+      })
+    }
+  }
+
+  function logoutHandler(e) {
+    e.preventDefault();
+
+    const valid = confirm("Mau Keluar ?")
+
+    if (valid) {
+      Cookies.remove('token');
+      Cookies.remove('idToko');
+
+      Router.replace('/login');
+    }
+
+  }
+
   return (
     <div>
       <Head>
@@ -16,25 +52,17 @@ const Navbar = (data) => {
         <div className="navbar-brand">
           <Link href="/">
             <a className="navbar-item">
-              <img
-                src="/user.png"
-                className="avatar"
-                width="40"
-                height="40"
-                alt=""
-              />
-              <h2 className="title is-size-3-desktop is-size-5-mobile pl-2 green">
-                Mitra
-              </h2>
+              <p className="title green">Wlijo</p>
             </a>
           </Link>
 
           <a
             role="button"
-            className="navbar-burger"
+            className={nav.navBur}
             aria-label="menu"
             aria-expanded="false"
             data-target="navbarBasicExample"
+            onClick={handleClick.bind(this)}
           >
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -42,7 +70,7 @@ const Navbar = (data) => {
           </a>
         </div>
 
-        <div id="navbarBasicExample" className="navbar-menu">
+        <div id="navbarBasicExample" className={nav.navMen}>
           <div className="navbar-end">
             <Link href="/">
               <a className="navbar-item">
@@ -64,6 +92,17 @@ const Navbar = (data) => {
                 Penjualan
               </a>
             </Link>
+            <div className="navbar-item has-dropdown is-hoverable">
+              <a className="navbar-link">
+                Akun
+              </a>
+
+              <div className="navbar-dropdown">
+                <a href="#" onClick={logoutHandler.bind(this)} className="navbar-item red">
+                  Log Out
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </nav>

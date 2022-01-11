@@ -5,7 +5,9 @@ exports.up = function (knex) {
         table.string('namaToko');
         table.string('password');
         table.string('noWa');
-        table.string('alamat');
+        table.string('kecamatan');
+        table.string('desa');
+        table.text('alamat');
         table.string('status');
         table.text('foto');
         table.timestamps(true, true);

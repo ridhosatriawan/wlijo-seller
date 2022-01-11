@@ -1,8 +1,37 @@
 import Head from 'next/head';
 import Router from 'next/router';
 import { useState } from 'react';
+import cookies from 'next-cookies';
 
-const TambahTransaksi = () => {
+export async function getServerSideProps(ctx) {
+    const { idToko, token } = cookies(ctx)
+    if (!token) {
+        return {
+            redirect: {
+                destination: '/login',
+                permanent: false
+            }
+        }
+    }
+    const req = await fetch('http://localhost:3000/api/penjualanLangsung/' + idToko);
+    const res = await req.json();
+    console.log(res);
+
+    const lastItem = res.data[res.data.length - 1]
+    const idPl = lastItem.idPl;
+    const judul = lastItem.judul;
+
+    return {
+        props: {
+            idToko,
+            idPl,
+            judul
+        }
+    }
+}
+
+const TambahTransaksi = (props) => {
+    const { idToko, idPl, judul } = props;
     const [list, setList] = useState([])
     const [uangMasuk, setUangMasuk] = useState("");
     const [update, setUpdate] = useState({
@@ -103,11 +132,25 @@ const TambahTransaksi = () => {
         })
     }
 
+    const sendData = () => {
+        fetch('http://localhost:3000/api/penjualanLangsung/tambah/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idToko: idToko,
+                idPl: idPl,
+                list: list
+            })
+        }).then(() => { Router.push('/penjualan/langsung') })
+    }
+
     const price = list.map(({ harga, jumlah }) => harga * jumlah);
     const total = (price.length != 0) ? price.reduce((total, amount) => total + amount) : "";
 
     return (
-        <div>
+        <>
             <Head>
                 <title>Tambah Transaksi</title>
             </Head>
@@ -119,7 +162,7 @@ const TambahTransaksi = () => {
             </div>
             <div className="wrapper-kasir ml-5 mt-5">
                 <div className="green is-size-7-mobile">
-                    Judul : <span className="gray"> {title} </span>
+                    Judul : <span className="gray"> {judul} </span>
                 </div>
             </div>
             <form onSubmit={handleSubmit.bind(this)} autoComplete="off" className="is-flex is-flex-direction-column form  my-6 ">
@@ -136,7 +179,7 @@ const TambahTransaksi = () => {
                     </div>
                 </div>
                 <div className="masukan mb-2 px-5">
-                    <label htmlFor="harga" className="label">Harga</label>
+                    <label htmlFor="harga" className="label">Harga Satuan</label>
                     <div className="control">
                         <input name="harga" onChange={handleChange.bind(this)} value={data.harga} type="number" className="input " />
                     </div>
@@ -206,11 +249,11 @@ const TambahTransaksi = () => {
                 <div className="harga-total"></div>
             </div>
             <div className="is-flex mx-4 red">
-                <label htmlFor="harga total">Kembalian : {uangMasuk - total}</label>
+                <label htmlFor="harga total">Kembalian : {uangMasuk ? uangMasuk - total : ""}</label>
                 <div className="harga-total"></div>
             </div>
-            <button className="button bg-green white is-rounded my-5 mx-4" type="submit">Bayar</button>
-        </div>
+            <button className="button bg-green white is-rounded my-5 mx-4" type="submit" onClick={sendData}>Bayar</button>
+        </>
     );
 }
 

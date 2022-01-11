@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     if (req.method !== "PUT") return res.status(405).end();
 
     const { id } = req.query;
-    const { namaToko, password, noWa, alamat, status, foto } = req.body;
+    const { namaToko, password, noWa, kecamatan, desa, alamat, status, foto } = req.body;
 
     const update = await db('profil')
         .where({ id })
@@ -12,6 +12,8 @@ export default async function handler(req, res) {
             namaToko,
             password,
             noWa,
+            kecamatan,
+            desa,
             alamat,
             status,
             foto

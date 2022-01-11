@@ -5,7 +5,16 @@ import cookies from "next-cookies";
 import Router from "next/router";
 
 export async function getServerSideProps(ctx) {
-  const { idToko } = cookies(ctx);
+  const { idToko, token } = cookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false
+      }
+    }
+  }
 
   const req = await fetch('http://localhost:3000/api/rencanaBelanja/' + idToko, {
     headers: {
@@ -49,7 +58,6 @@ const RencanaBelanja = (props) => {
     // belum bisa hapus detailnya
     const validation = confirm("Mau di Hapus ?");
     const filtered = list.filter(data => data.idRencana !== id);
-    console.log(validation);
 
     if (validation) {
       fetch(`http://localhost:3000/api/rencanaBelanja/delete/${idToko}/${id}`, {
@@ -58,7 +66,6 @@ const RencanaBelanja = (props) => {
       setList(
         filtered
       );
-      console.log("asek");
     }
 
   }
@@ -79,7 +86,7 @@ const RencanaBelanja = (props) => {
   }
 
   return (
-    <div>
+    <>
       <Head>
         <title>Rencana Belanja</title>
       </Head>
@@ -127,7 +134,7 @@ const RencanaBelanja = (props) => {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
