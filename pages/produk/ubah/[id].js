@@ -18,7 +18,7 @@ export async function getServerSideProps(ctx) {
     }
 
     const { id } = ctx.query
-    const req = await fetch('http://localhost:3000/api/produk/' + id);
+    const req = await fetch('http://localhost:3000/api/produk/detail/' + id);
     const res = await req.json();
 
     return {
@@ -105,13 +105,13 @@ export default function EditProduk(props) {
     return (
         <>
             <Head>
-                <title>Edit Toko</title>
+                <title>Edit Produk</title>
             </Head>
             <div className="mx-5 mt-5 ">
                 <button onClick={() => { Router.push('/produk') }} className="button green is-size-7-mobile"><i className="fas fa-arrow-left pr-2 green"></i>Kembali</button>
             </div>
             <div className="title is-size-5-mobile green px-5 pt-5 is-flex is-justify-content-space-between is-align-items-center masukan">
-                <p>Edit Toko</p>
+                <p>Edit Produk</p>
             </div>
             <div className="is-flex is-justify-start mx-5">
                 <figure className="image is-128x128">

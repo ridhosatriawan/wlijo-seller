@@ -202,3 +202,10 @@ tr:nth-child(even) {
 .red {
   color: red;
 }
+
+
+@media (max-width : 768px) {
+  .m-100 {
+    margin: 0;
+  }
+}

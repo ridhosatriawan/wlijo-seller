@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from 'react';
 import cookies from "next-cookies";
 import Router from "next/router";
+import Modal from '../../components/Modal';
 
 export async function getServerSideProps(ctx) {
   const { idToko, token } = cookies(ctx);
@@ -36,6 +37,8 @@ const RencanaBelanja = (props) => {
   const { idToko } = props
   const [list, setList] = useState(props.list);
   const [modal, setModal] = useState('modal');
+  const [modalDelete, setModalDelete] = useState('modal');
+  const [id, setId] = useState("");
   const [title, setTitle] = useState("");
 
   const modalHandler = () => {
@@ -44,6 +47,20 @@ const RencanaBelanja = (props) => {
     } else {
       setModal("modal")
     }
+  }
+
+  const modalDeleteHandler = (id) => {
+    setId(id);
+    if (modalDelete === "modal") {
+      setModalDelete("modal is-active")
+    } else {
+      setModalDelete("modal")
+    }
+  }
+  function lanjutHandler() {
+    modalDeleteHandler();
+    handleDelete(id);
+    setId("")
   }
 
   const titleChange = (e) => {
@@ -55,18 +72,13 @@ const RencanaBelanja = (props) => {
   }
 
   function handleDelete(id) {
-    // belum bisa hapus detailnya
-    const validation = confirm("Mau di Hapus ?");
     const filtered = list.filter(data => data.idRencana !== id);
-
-    if (validation) {
-      fetch(`http://localhost:3000/api/rencanaBelanja/delete/${idToko}/${id}`, {
-        method: "DELETE"
-      });
-      setList(
-        filtered
-      );
-    }
+    fetch(`http://localhost:3000/api/rencanaBelanja/delete/${idToko}/${id}`, {
+      method: "DELETE"
+    });
+    setList(
+      filtered
+    );
 
   }
 
@@ -86,13 +98,14 @@ const RencanaBelanja = (props) => {
   }
 
   return (
-    <>
+    <div className="m-100">
       <Head>
         <title>Rencana Belanja</title>
       </Head>
       <div className="title is-size-5-mobile green px-5 pt-5 is-flex is-justify-content-space-between is-align-items-center masukan">
         <p>Rencana Belanja</p>
       </div>
+      <Modal modal={modalDelete} text="Hapus Produk ?" lanjutHandler={lanjutHandler} cancelHandler={modalDeleteHandler} />
       <div className="has-text-centered is-flex-direction-column">
         <div className="is-flex is-justify-content-left pb-5">
           <button className="button is-flex is-align-items-center green mx-5 content" onClick={modalHandler}>
@@ -128,13 +141,13 @@ const RencanaBelanja = (props) => {
                     Detail
                   </button>
                 </Link>
-                <button onClick={handleDelete.bind(this, x.idRencana)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">Hapus</button>
+                <button onClick={modalDeleteHandler.bind(this, x.idRencana)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">Hapus</button>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

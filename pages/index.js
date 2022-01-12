@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
 import cookies from "next-cookies";
+import Modal from "../components/Modal";
 
 
 export async function getServerSideProps(ctx) {
@@ -55,6 +56,21 @@ const BtnStat = (props) => {
 export default function DashboardToko(props) {
   const { id, namaToko, password, desa, kecamatan, noWa, alamat, status, foto } = props.data;
   const [statusToko, setStatusToko] = useState(status);
+  const [modal, setModal] = useState("modal");
+
+  function modalHandler() {
+    if (modal === "modal") {
+      setModal("modal is-active");
+    } else {
+      setModal("modal");
+    }
+  }
+
+  function lanjutHandler() {
+    modalHandler();
+    berhenti();
+  }
+
   const [dataToko, setDataToko] = useState({
     namaToko,
     password,
@@ -65,6 +81,8 @@ export default function DashboardToko(props) {
     status,
     foto
   })
+
+
 
   function jualan() {
     setStatusToko("aktif");
@@ -85,25 +103,21 @@ export default function DashboardToko(props) {
   }
 
   function berhenti() {
-    setStatusToko("non");
-    const validation = confirm("Berhenti Jualan ?");
+    fetch('http://localhost:3000/api/profil/update/' + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        namaToko: dataToko.namaToko,
+        password: dataToko.password,
+        noWa: dataToko.noWa,
+        alamat: dataToko.alamat,
+        status: "non",
+        foto: dataToko.foto
+      })
+    }).then(setStatusToko("non"));
 
-    if (validation) {
-      fetch('http://localhost:3000/api/profil/update/' + id, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          namaToko: dataToko.namaToko,
-          password: dataToko.password,
-          noWa: dataToko.noWa,
-          alamat: dataToko.alamat,
-          status: "non",
-          foto: dataToko.foto
-        })
-      });
-    }
   }
 
   return (
@@ -112,7 +126,8 @@ export default function DashboardToko(props) {
         <title>Dashboard Toko</title>
       </Head>
       {/*  */}
-      <div className="is-flex">
+      <Modal modal={modal} text="Berhenti Jualan ?" lanjutHandler={lanjutHandler} cancelHandler={modalHandler} />
+      <div className="is-flex m-100">
         <div className="content">
           <div className="has-text-centered is-flex-direction-column bg-green m-5 p-5">
             <div className="is-flex is-justify-content-center">
@@ -155,7 +170,7 @@ export default function DashboardToko(props) {
           <div className="m-5 is-flex is-justify-content-center">
             {
               dataToko.desa ?
-                <BtnStat status={statusToko} jualan={jualan} berhenti={berhenti} /> :
+                <BtnStat status={statusToko} jualan={jualan} berhenti={modalHandler} /> :
                 <div className="has-text-centered">Lengkapi Data Diri Anda Untuk Mulai Berjualan</div>
             }
           </div>

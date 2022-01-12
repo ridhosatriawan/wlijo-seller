@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Router from "next/router";
 import cookies from "next-cookies";
+import Modal from "../../../components/Modal";
 
 export async function getServerSideProps(ctx) {
   const { idToko, token } = cookies(ctx);
@@ -36,12 +37,29 @@ const PenjualanLangsung = (props) => {
   const [list, setList] = useState(props.list);
   const [title, setTitle] = useState("");
   const [modal, setModal] = useState('modal');
+  const [modalDelete, setModalDelete] = useState('modal');
+  const [id, setId] = useState("");
 
   const titleChange = (e) => {
     const value = e.target.value;
     const len = title.length;
     if (len < 20) {
       setTitle(value);
+    }
+  }
+
+  function lanjutHandler() {
+    modalDeleteHandler();
+    handleDelete(id);
+    setId("")
+  }
+
+  const modalDeleteHandler = (id) => {
+    setId(id);
+    if (modalDelete === "modal") {
+      setModalDelete("modal is-active")
+    } else {
+      setModalDelete("modal")
     }
   }
 
@@ -54,17 +72,13 @@ const PenjualanLangsung = (props) => {
   }
 
   function handleDelete(id) {
-    const validation = confirm("Mau di Hapus ?");
     const filtered = list.filter(data => data.idPl !== id);
-
-    if (validation) {
-      fetch(`http://localhost:3000/api/penjualanLangsung/delete/${idToko}/${id}`, {
-        method: "DELETE"
-      });
-      setList(
-        filtered
-      );
-    }
+    fetch(`http://localhost:3000/api/penjualanLangsung/delete/${idToko}/${id}`, {
+      method: "DELETE"
+    });
+    setList(
+      filtered
+    );
 
   }
 
@@ -84,13 +98,14 @@ const PenjualanLangsung = (props) => {
   }
 
   return (
-    <>
+    <div className="m-100">
       <Head>
         <title>Penjualan Langsung</title>
       </Head>
       <div className="title is-size-5-mobile green pl-5 pt-5">
         <p>Penjualan</p>
       </div>
+      <Modal modal={modalDelete} text="Hapus Produk ?" lanjutHandler={lanjutHandler} cancelHandler={modalDeleteHandler} />
       <div className="columns is-mobile my-5">
         <div className="column has-text-centered divi">
           <Link href="/penjualan/langsung">
@@ -138,7 +153,7 @@ const PenjualanLangsung = (props) => {
                     Detail
                   </button>
                 </Link>
-                <button onClick={handleDelete.bind(this, data.idPl)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">
+                <button onClick={modalDeleteHandler.bind(this, data.idPl)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">
                   hapus
                 </button>
               </div>
@@ -146,7 +161,7 @@ const PenjualanLangsung = (props) => {
           ))
         }
       </div>
-    </>
+    </div>
   );
 };
 
