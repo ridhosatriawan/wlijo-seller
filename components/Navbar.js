@@ -3,12 +3,28 @@ import Link from "next/link";
 import { useState } from 'react';
 import Cookies from "js-cookie";
 import Router from "next/router";
+import Modal from '../components/Modal';
 
 const Navbar = (data) => {
   const [nav, setNav] = useState({
     navBur: "navbar-burger",
     navMen: "navbar-menu"
   })
+
+  const [modal, setModal] = useState("modal");
+
+  function modalHandler() {
+    if (modal === "modal") {
+      setModal("modal is-active");
+    } else {
+      setModal("modal");
+    }
+  }
+
+  function lanjutHandler() {
+    modalHandler();
+    logoutHandler();
+  }
 
   function handleClick() {
     if (nav.navBur === "navbar-burger") {
@@ -24,22 +40,17 @@ const Navbar = (data) => {
     }
   }
 
-  function logoutHandler(e) {
-    e.preventDefault();
+  function logoutHandler() {
+    Cookies.remove('token');
+    Cookies.remove('idToko');
 
-    const valid = confirm("Mau Keluar ?")
-
-    if (valid) {
-      Cookies.remove('token');
-      Cookies.remove('idToko');
-
-      Router.replace('/login');
-    }
+    Router.replace('/login');
 
   }
 
   return (
     <div>
+      <Modal modal={modal} text="Mau Keluar ?" lanjutHandler={lanjutHandler} cancelHandler={modalHandler} />
       <Head>
         <title>{data.title}</title>
         <script src="/dropdown.js"></script>
@@ -98,7 +109,7 @@ const Navbar = (data) => {
               </a>
 
               <div className="navbar-dropdown">
-                <a href="#" onClick={logoutHandler.bind(this)} className="navbar-item red">
+                <a href="#" onClick={modalHandler.bind(this)} className="navbar-item red">
                   Log Out
                 </a>
               </div>
