@@ -3,6 +3,8 @@
 
 body {
   font-family: "Roboto", sans-serif;
+  background-color: rgb(247, 247, 247);
+  min-height: 100vh;
 }
 
 .green {
@@ -51,6 +53,13 @@ body {
 
 div.aksi .button:hover {
   color: white;
+}
+
+.tabs.is-boxed li.is-active a {
+  background-color: rgb(247, 247, 247);
+}
+.tabs li.is-active a {
+  color: green;
 }
 
 .pointer:hover {
@@ -203,8 +212,7 @@ tr:nth-child(even) {
   color: red;
 }
 
-
-@media (max-width : 768px) {
+@media (max-width: 768px) {
   .m-100 {
     margin: 0;
   }

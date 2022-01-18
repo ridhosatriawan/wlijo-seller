@@ -53,7 +53,6 @@ const Navbar = (data) => {
       <Modal modal={modal} text="Mau Keluar ?" lanjutHandler={lanjutHandler} cancelHandler={modalHandler} />
       <Head>
         <title>{data.title}</title>
-        <script src="/dropdown.js"></script>
       </Head>
       <nav
         className="navbar navigasi"

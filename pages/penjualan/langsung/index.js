@@ -98,7 +98,7 @@ const PenjualanLangsung = (props) => {
   }
 
   return (
-    <div className="m-100">
+    <div className="">
       <Head>
         <title>Penjualan Langsung</title>
       </Head>
@@ -118,7 +118,7 @@ const PenjualanLangsung = (props) => {
           </Link>
         </div>
       </div>
-      <div className="is-flex is-justify-content-left pb-5">
+      <div className="is-flex is-justify-content-left m-100" >
         <button className="button is-flex is-align-items-center green mx-5 content" onClick={modalHandler}>
           <i className="fas fa-plus mr-3"></i>Tambah Penjualan Langsung</button>
       </div>
@@ -145,17 +145,17 @@ const PenjualanLangsung = (props) => {
       <div className="block my-5 tp-border">
         {
           list.map((data, index) => (
-            <div key={index} className="is-flex is-align-items-center is-justify-content-space-between px-5 mt-3 pb-3 btm-border">
-              <h3 className="is-size-5-mobile is-size-3-desktop">{data.judul}</h3>
-              <div className="aksi">
-                <Link href={"/penjualan/langsung/detail/" + idToko + "/" + data.idPl}>
-                  <button className="button is-size-6-desktop is-size-7-mobile bg-green white">
-                    Detail
-                  </button>
-                </Link>
-                <button onClick={modalDeleteHandler.bind(this, data.idPl)} className="button is-size-6-desktop is-size-7-mobile bg-red white ml-1">
-                  hapus
-                </button>
+            <div key={index} className="card mx-5 my-2">
+              <div className="card-content">
+                <div className="content is-flex is-justify-content-space-between is-align-items-center">
+                  <div className='is-size-6 has-text-weight-bold'>{data.judul}</div>
+                  <div>
+                    <Link href={"/penjualan/langsung/detail/" + idToko + "/" + data.idPl}>
+                      <button className='button bg-green white is-small'>Detail</button>
+                    </Link>
+                    <button onClick={modalDeleteHandler.bind(this, data.idPl)} className='button bg-red white is-small'>Hapus</button>
+                  </div>
+                </div>
               </div>
             </div>
           ))
