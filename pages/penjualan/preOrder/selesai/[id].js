@@ -70,7 +70,7 @@ class ComponentToPrint extends React.Component {
     }
 }
 
-export default function detailPO(props) {
+export default function DetailPO(props) {
     const [pesanan, setPesanan] = useState(props.detailPesanan);
     const [dataPo, setdataPo] = useState(props.dataPo);
 

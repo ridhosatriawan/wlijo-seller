@@ -27,8 +27,8 @@ export async function getServerSideProps(ctx) {
 }
 
 
-export default function detailPL(props) {
-    const [list, seList] = useState(props.data.list);
+export default function DetailPL(props) {
+    const [list, setList] = useState(props.data.list);
     const price = list.map(({ harga }) => harga);
     const total = price.reduce((total, amount) => total + amount);
 

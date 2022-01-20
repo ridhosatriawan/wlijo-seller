@@ -25,7 +25,7 @@ export async function getServerSideProps(ctx) {
 
 }
 
-export default function detailPesanan(props) {
+export default function DetailPesanan(props) {
     const [pesanan, setPesanan] = useState(props.detailPesanan);
     const [dataPo, setdataPo] = useState(props.dataPo);
     const [modalDelete, setModalDelete] = useState('modal');

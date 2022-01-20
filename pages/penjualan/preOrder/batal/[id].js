@@ -24,9 +24,9 @@ export async function getServerSideProps(ctx) {
 
 }
 
-export default function batalPesanan(props) {
+export default function BatalPesanan(props) {
     const [pesanan, setPesanan] = useState(props.detailPesanan);
-    const [dataPo, setdataPo] = useState(props.dataPo);
+    const [dataPo, setDataPo] = useState(props.dataPo);
 
     const price = pesanan.map(({ harga }) => harga);
     const total = (price.length != 0) ? price.reduce((total, amount) => total + amount) : "";

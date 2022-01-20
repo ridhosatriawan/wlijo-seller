@@ -25,9 +25,9 @@ export async function getServerSideProps(ctx) {
 
 }
 
-export default function detailPesananDiantar(props) {
+export default function DetailPesananDiantar(props) {
     const [pesanan, setPesanan] = useState(props.detailPesanan);
-    const [dataPo, setdataPo] = useState(props.dataPo);
+    const [dataPo, setDataPo] = useState(props.dataPo);
     const [modalSelesai, setModalSelesai] = useState('modal');
 
     const modalSelesaiHandler = () => {

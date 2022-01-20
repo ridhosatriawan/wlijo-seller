@@ -163,7 +163,7 @@ const Daftar = () => {
                   Sudah Punya Akun ?
                 </span>
                 <Link href='/login'>
-                  <a className="green has-text-weight-bold ml-1" href="/login">
+                  <a className="green has-text-weight-bold ml-1">
                     Login
                   </a>
                 </Link>
